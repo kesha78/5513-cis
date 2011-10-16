@@ -10,4 +10,18 @@
     <artifactId>mrp-entity</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>MRP-5513-Entity</name>
+    	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>ejb3-persistence</artifactId>
+			<version>[1.0.2.GA,)</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.5.2-Final</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>

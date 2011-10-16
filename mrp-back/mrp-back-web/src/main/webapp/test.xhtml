@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<head>
+    <title>MRP Test Page</title>
+</head>
+<body>
+<h:form>
+    <p:commandButton value="Add Test Data" action="#{testBean.addMaterial('TEST',123)}" update="materialsTable"/>
+<p:dataTable id="materialsTable" var="material" value="#{testBean.materials}" dynamic="true">
+    <p:column headerText="ID" sortBy="#{material.id}" filterBy="#{material.id}">
+            <h:outputText value="#{material.id}"/>
+    </p:column>
+    <p:column headerText="Name" sortBy="#{material.name}" filterBy="#{material.name}">
+            <h:outputText value="#{material.name}"/>
+    </p:column>
+    <p:column headerText="Price" sortBy="#{material.price}" filterBy="#{material.price}">
+            <h:outputText value="#{material.price}"/>
+    </p:column>
+</p:dataTable>
+</h:form>
+</body>
+</html>

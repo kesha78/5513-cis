@@ -7,15 +7,11 @@
 		transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/mrpDataSource</jta-data-source>
+        <class>ru.ifmo.cis.mrp.entity.Material</class>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create" />
 			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.cache.region.factory_class"
-				value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
-			<property name="hibernate.cache.use_second_level_cache"
-				value="true" />
-			<property name="hibernate.cache.use_query_cache" value="true" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+    		<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
 		</properties>
 	</persistence-unit>
 </persistence>
