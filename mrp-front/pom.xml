@@ -11,4 +11,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MRP-5513-Front</name>
+        <modules>
+		<module>mrp-front-ear</module>
+        <module>mrp-front-ejb</module>
+        <module>mrp-front-web</module>
+    </modules>
 </project>

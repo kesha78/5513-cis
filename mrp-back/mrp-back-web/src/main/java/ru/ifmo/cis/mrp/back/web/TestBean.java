@@ -26,7 +26,6 @@ public class TestBean implements Serializable{
     public void addMaterial(String name,Long price){
         Material material = new Material();
         material.setName(name);
-        material.setPrice(price);
         materialsDao.create(material);
     }
     public Collection<Material> getMaterials(){

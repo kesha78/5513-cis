@@ -6,20 +6,22 @@ import java.io.Serializable;
 /**
  * Created by IntelliJ IDEA.
  * User: Igor
- * Date: 16.10.11
- * Time: 17:19
+ * Date: 12.11.11
+ * Time: 16:06
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "MATERIALS")
-public class Material implements Serializable{
-
-    private Long id;
-    private String name;
-
+@Table(name = "GOODS")
+public class Good implements Serializable{
 
     @Id
     @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+
     public Long getId() {
         return id;
     }
@@ -28,7 +30,6 @@ public class Material implements Serializable{
         this.id = id;
     }
 
-    @Column(nullable = false)
     public String getName() {
         return name;
     }
