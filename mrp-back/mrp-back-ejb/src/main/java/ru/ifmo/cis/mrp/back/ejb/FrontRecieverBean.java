@@ -37,7 +37,7 @@ public class FrontRecieverBean implements MessageListener {
             ObjectMessage objectMessage = (ObjectMessage)message;
             try {
                 if(objectMessage.getObject() instanceof Order){
-                    LOGGER.info("[Front] Recieved Order");
+                    LOGGER.info("[Back] Recieved Order");
                 }
             } catch (JMSException e) {
                 LOGGER.error("Exception while recieving message",e);

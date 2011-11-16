@@ -1,9 +1,9 @@
-package ru.ifmo.cis.mrp.front.ejb.ru.ifmo.cis.mrp.front.ejb.impl;
+package ru.ifmo.cis.mrp.front.ejb.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ifmo.cis.mrp.entity.Order;
-import ru.ifmo.cis.mrp.front.ejb.ru.ifmo.cis.mrp.front.ejb.OrderSenderBean;
+import ru.ifmo.cis.mrp.front.ejb.OrderSenderBean;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -18,7 +18,7 @@ import javax.jms.*;
  * To change this template use File | Settings | File Templates.
  */
 @Stateless(name = "OrderSenderEJB")
-public class OrderSenderBeanImpl implements OrderSenderBean{
+public class OrderSenderBeanImpl implements OrderSenderBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderSenderBeanImpl.class);
 
@@ -32,6 +32,7 @@ public class OrderSenderBeanImpl implements OrderSenderBean{
     }
 
     public boolean sendOrder(Order order){
+        LOGGER.info("[Front] Sending order");
         QueueConnection con = null;
         QueueSession ses = null;
         QueueSender sender = null;
@@ -43,6 +44,9 @@ public class OrderSenderBeanImpl implements OrderSenderBean{
             sender = ses.createSender(frontBackQueue);
             ObjectMessage msg = ses.createObjectMessage(order);
             sender.send(msg);
+            sender.close();
+            ses.close();
+            con.close();
         } catch (JMSException e){
             LOGGER.error("Exception while sending order from front to back",e);
         }

@@ -7,7 +7,13 @@
 		transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/mrpDataSource</jta-data-source>
+        <class>ru.ifmo.cis.mrp.entity.Good</class>
+        <class>ru.ifmo.cis.mrp.entity.GoodStorage</class>
         <class>ru.ifmo.cis.mrp.entity.Material</class>
+        <class>ru.ifmo.cis.mrp.entity.MaterialsToGoods</class>
+        <class>ru.ifmo.cis.mrp.entity.MaterialStorage</class>
+        <class>ru.ifmo.cis.mrp.entity.Supply</class>
+        <class>ru.ifmo.cis.mrp.entity.SupplyRequest</class>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create" />
 			<property name="hibernate.show_sql" value="true" />

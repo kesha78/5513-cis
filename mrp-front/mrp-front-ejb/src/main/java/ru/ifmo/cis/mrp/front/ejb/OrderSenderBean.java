@@ -1,4 +1,4 @@
-package ru.ifmo.cis.mrp.front.ejb.ru.ifmo.cis.mrp.front.ejb;
+package ru.ifmo.cis.mrp.front.ejb;
 
 import ru.ifmo.cis.mrp.entity.Order;
 
@@ -15,6 +15,6 @@ import javax.ejb.Local;
 @Local
 public interface OrderSenderBean {
 
-    public boolean sendOrder(Order order);
+    boolean sendOrder(Order order);
 
 }

@@ -21,5 +21,21 @@ public class Order implements Serializable{
 
     @OneToMany
     private Collection<OrderContent> orderContents;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Collection<OrderContent> getOrderContents() {
+        return orderContents;
+    }
+
+    public void setOrderContents(Collection<OrderContent> orderContents) {
+        this.orderContents = orderContents;
+    }
 }
 

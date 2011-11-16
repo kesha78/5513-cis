@@ -4,12 +4,4 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"
 	version="3.1">
 	<display-name>mrp-front-ejb</display-name>
-    <enterprise-beans>
-        <session>
-            <ejb-name>OrderSenderEJB</ejb-name>
-            <ejb-class>ru.ifmo.cis.mrp.front.ejb.ru.ifmo.cis.mrp.front.ejb.impl.OrderSenderBean</ejb-class>
-            <session-type>Stateless</session-type>
-            <transaction-type>Container</transaction-type>
-        </session>
-    </enterprise-beans>
 </ejb-jar>
