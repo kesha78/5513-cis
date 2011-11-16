@@ -46,6 +46,19 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <hostName>127.0.0.1</hostName>
+                    <port>8080</port>
+                    <fileNames>
+                        <fileName>${basedir}/mrp-back/mrp-back-ear/target/back-ear.ear</fileName>
+                        <fileName>${basedir}/mrp-front/mrp-front-ear/target/front-ear.ear</fileName>
+                    </fileNames>
+                </configuration>
+            </plugin>
     </plugins>
     </build>
 </project>

@@ -20,15 +20,15 @@ import javax.jms.ObjectMessage;
  * To change this template use File | Settings | File Templates.
  */
 @TransactionManagement
-@MessageDriven(name = "FrontRecieverEJB", activationConfig =
+@MessageDriven(name = "FrontReceiverEJB", activationConfig =
         {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
          @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
          @ActivationConfigProperty(propertyName = "destination", propertyValue = "/queue/frontBack")})
-public class FrontRecieverBean implements MessageListener {
+public class FrontReceiverBean implements MessageListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FrontRecieverBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FrontReceiverBean.class);
 
-    public FrontRecieverBean() {
+    public FrontReceiverBean() {
     }
 
     @Override
@@ -37,10 +37,10 @@ public class FrontRecieverBean implements MessageListener {
             ObjectMessage objectMessage = (ObjectMessage)message;
             try {
                 if(objectMessage.getObject() instanceof Order){
-                    LOGGER.info("[Back] Recieved Order");
+                    LOGGER.info("[Back] Received Order");
                 }
             } catch (JMSException e) {
-                LOGGER.error("Exception while recieving message",e);
+                LOGGER.error("Exception while receiving message",e);
             }
         }
     }

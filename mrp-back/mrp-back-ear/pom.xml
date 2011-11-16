@@ -37,6 +37,18 @@
                 </configuration>
                 <version>2.6</version>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <hostName>127.0.0.1</hostName>
+                    <port>8080</port>
+                    <fileNames>
+                        <fileName>${project.build.directory}/back-ear.ear</fileName>
+                    </fileNames>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>

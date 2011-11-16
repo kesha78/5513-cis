@@ -57,8 +57,11 @@ public class OrderBean implements Serializable{
         order.getOrderContents().add(currentOrderContent);
     }
 
+    public int getAllGoodsSize(){
+        return getAllGoods().size();
+    }
+
     public Collection<Good> getAllGoods(){
-        LOGGER.info("ALL GOODS SIZE= " + goodsBean.getAllGoods().size());
         return goodsBean.getAllGoods();
     }
 }
