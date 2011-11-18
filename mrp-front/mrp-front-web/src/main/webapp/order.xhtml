@@ -11,32 +11,45 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable id="orderTable" var="order" value="#{orderBean.order.orderContents}" paginator="true" rows="10">
+                <p:dataTable id="orderTable" var="order" value="#{orderBean.order.orderContents}" paginator="true"
+                             rows="10">
                     <f:facet name="header">
                         Order Details:
                     </f:facet>
-      				<p:column style="width:10px" >
-    					<p:rowEditor/>
-	    			</p:column>
-                    <p:column filterBy="#{order.good.name}">
-                        <p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{order.good.name}"/>
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{order.good.name}"/>
-						</f:facet>
-					</p:cellEditor>
+                    <p:column style="width:10px">
+                        <p:rowEditor/>
                     </p:column>
-                     <p:column filterBy="#{order.count}">
+                    <p:column filterBy="#{order.good.name}">
+                        <f:facet name="header">
+                            Good name:
+                        </f:facet>
                         <p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{order.count}"/>
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{order.count}"/>
-						</f:facet>
-					</p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{order.good.name}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{order.good.name}">
+                                    <f:selectItems value="#{orderBean.allGoods}"
+                                                   var="good"
+                                                   itemLabel="#{good.name}"
+                                                   itemValue="#{good}"/>
+                                </h:selectOneMenu>
+                            </f:facet>
+
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column filterBy="#{order.count}">
+                        <f:facet name="header">
+                            Count:
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{order.count}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{order.count}"/>
+                            </f:facet>
+                        </p:cellEditor>
                     </p:column>
                 </p:dataTable>
                 <p:commandButton action="#{orderBean.addGoodRequest}" update="orderTable" value="Add Good Request"/>
