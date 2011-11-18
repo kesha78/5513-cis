@@ -23,17 +23,6 @@ public class MaterialsToGoods implements Serializable{
 
     @ManyToOne
     private Good good;
-    
-    private Long count;
-    
-
-    public Long getCount() {
-        return count;
-    }
-
-    public void setCount(Long count) {
-        this.count = count;
-    }
 
     public Long getId() {
         return id;
