@@ -16,49 +16,36 @@
     </repositories>
     <dependencies>
         <dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
-		</dependency>
-        <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
             <scope>provided</scope>
-		</dependency>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <modules>
-		<module>mrp-front</module>
+        <module>mrp-front</module>
         <module>mrp-back</module>
         <module>mrp-imit</module>
         <module>mrp-entity</module>
     </modules>
 
-	<build>
-		<plugins>
-			<plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-            </plugin>
+    <build>
+        <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jboss-maven-plugin</artifactId>
-                <version>1.5.0</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
-                    <hostName>127.0.0.1</hostName>
-                    <port>8080</port>
-                    <fileNames>
-                        <fileName>${basedir}/mrp-back/mrp-back-ear/target/back-ear.ear</fileName>
-                        <fileName>${basedir}/mrp-front/mrp-front-ear/target/front-ear.ear</fileName>
-                    </fileNames>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-    </plugins>
+        </plugins>
     </build>
 </project>

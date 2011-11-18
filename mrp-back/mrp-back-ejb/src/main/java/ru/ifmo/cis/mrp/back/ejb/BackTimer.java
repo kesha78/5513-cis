@@ -28,7 +28,7 @@ public class BackTimer {
     private ConnectionFactory connectionFactory;
 
     @Resource(mappedName = "/topic/tickTopic")
-    private Queue tickTopic;
+    private Topic tickTopic;
 
     @EJB
     private SequenceOptimizer sequenceOptimizer;
@@ -46,17 +46,17 @@ public class BackTimer {
     public void timeout(final Timer timer) {
         if ((timer.getInfo() != null) && (timer.getInfo().equals(BACK_TIMER))) {
             LOGGER.info("[Back] Tick");
-            QueueConnection con;
-            QueueSession ses;
-            QueueSender sender;
+            TopicConnection con;
+            TopicSession ses;
+            TopicPublisher sender;
             try {
-                QueueConnectionFactory qcf = (QueueConnectionFactory) connectionFactory;
-                con = qcf.createQueueConnection();
-                ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-                sender = ses.createSender(tickTopic);
+                TopicConnectionFactory qcf = (TopicConnectionFactory) connectionFactory;
+                con = qcf.createTopicConnection();
+                ses = con.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+                sender = ses.createPublisher(tickTopic);
                 ObjectMessage msg = ses.createObjectMessage(null);
                 //ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
-                sender.send(msg);
+                sender.publish(msg);
                 sender.close();
                 ses.close();
                 con.close();
