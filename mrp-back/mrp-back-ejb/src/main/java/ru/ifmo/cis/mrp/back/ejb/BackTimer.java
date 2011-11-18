@@ -27,8 +27,8 @@ public class BackTimer {
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
 
-    @Resource(mappedName = "topic/tickTopic")
-    private Queue frontBackQueue;
+    @Resource(mappedName = "/topic/tickTopic")
+    private Queue tickTopic;
 
     @EJB
     private SequenceOptimizer sequenceOptimizer;
@@ -53,8 +53,9 @@ public class BackTimer {
                 QueueConnectionFactory qcf = (QueueConnectionFactory) connectionFactory;
                 con = qcf.createQueueConnection();
                 ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-                sender = ses.createSender(frontBackQueue);
-                ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
+                sender = ses.createSender(tickTopic);
+                ObjectMessage msg = ses.createObjectMessage(null);
+                //ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
                 sender.send(msg);
                 sender.close();
                 ses.close();
