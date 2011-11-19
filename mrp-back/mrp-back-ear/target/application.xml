@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+	"-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN"
+	"http://java.sun.com/dtd/application_1_3.dtd">
+<application>
+  <display-name>mrp-back-ear</display-name>
+  <module>
+    <java>mrp-entity-1.0-SNAPSHOT.jar</java>
+  </module>
+  <module>
+    <ejb>mrp-back-ejb-1.0-SNAPSHOT.jar</ejb>
+  </module>
+  <module>
+    <web>
+      <web-uri>mrp-back-web-1.0-SNAPSHOT.war</web-uri>
+      <context-root>/back</context-root>
+    </web>
+  </module>
+</application>

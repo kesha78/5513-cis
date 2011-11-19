@@ -11,20 +11,14 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable id="orderTable" 
-                			 var="order" 
-                			 value="#{orderController.order.orderContents}" 
-                			 paginator="true"
+                <p:dataTable id="orderTable" var="order" value="#{orderBean.order.orderContents}" paginator="true"
                              rows="10">
-                    
                     <f:facet name="header">
                         Order Details:
                     </f:facet>
-                    
                     <p:column style="width:10px">
                         <p:rowEditor/>
                     </p:column>
-                    
                     <p:column filterBy="#{order.good.name}">
                         <f:facet name="header">
                             Good name:
@@ -35,7 +29,7 @@
                             </f:facet>
                             <f:facet name="input">
                                 <h:selectOneMenu value="#{order.good.name}">
-                                    <f:selectItems value="#{orderController.allGoods}"
+                                    <f:selectItems value="#{orderBean.allGoods}"
                                                    var="good"
                                                    itemLabel="#{good.name}"
                                                    itemValue="#{good}"/>
@@ -44,7 +38,6 @@
 
                         </p:cellEditor>
                     </p:column>
-                    
                     <p:column filterBy="#{order.count}">
                         <f:facet name="header">
                             Count:
@@ -59,8 +52,8 @@
                         </p:cellEditor>
                     </p:column>
                 </p:dataTable>
-                <p:commandButton action="#{orderController.addGoodRequest}" update="orderTable" value="Add Good Request"/>
-                <p:commandButton action="#{orderController.sendOrder}" value="Send Order"/>
+                <p:commandButton action="#{orderBean.addGoodRequest}" update="orderTable" value="Add Good Request"/>
+                <p:commandButton action="#{orderBean.sendOrder}" value="Send Order"/>
             </h:form>
         </ui:define>
     </ui:composition>
