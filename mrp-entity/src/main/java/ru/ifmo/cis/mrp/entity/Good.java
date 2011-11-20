@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "GOODS")
-public class Good implements Serializable{
+public class Good implements Serializable {
 
     @Id
     @GeneratedValue
@@ -36,5 +36,10 @@ public class Good implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

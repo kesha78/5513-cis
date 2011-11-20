@@ -15,4 +15,6 @@ import java.util.Collection;
 @Local
 public interface GoodsBean {
     Collection<Good> getAllGoods();
+
+    Good findGoodByName(String name);
 }

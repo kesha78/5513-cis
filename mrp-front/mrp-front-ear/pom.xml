@@ -42,7 +42,6 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.3</version>
                 <executions>
-
                     <execution>
                         <id>copy-front-ear</id>
                         <phase>install</phase>
@@ -50,7 +49,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>C:\jboss-6.1.0.Final\server\default\deploy
+                            <outputDirectory>/Users/Igor/Documents/jboss-6.1.0.Final/server/default/deploy
                             </outputDirectory>
                             <resources>
                                 <resource>

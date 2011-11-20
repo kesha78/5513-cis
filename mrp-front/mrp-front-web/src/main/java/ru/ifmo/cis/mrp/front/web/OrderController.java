@@ -20,7 +20,7 @@ import java.util.Collection;
  */
 @ManagedBean
 @ViewScoped
-public class OrderController implements Serializable{
+public class OrderController implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
@@ -40,24 +40,26 @@ public class OrderController implements Serializable{
         this.order = order;
     }
 
-    public void sendOrder(){
+    public void sendOrder() {
+        for (OrderContent orderContent : order.getOrderContents()) {
+            if (orderContent.getGood().getId() == null) {
+                LOGGER.info("Null good ID,fixing...");
+                orderContent.setGood(goodsBean.findGoodByName(orderContent.getGood().getName()));
+            }
+        }
         orderSenderBean.sendOrder(order);
     }
 
-    public void addGoodRequest(){
-        if(order.getOrderContents()==null){
-           order.setOrderContents(new ArrayList<OrderContent>());
+    public void addGoodRequest() {
+        if (order.getOrderContents() == null) {
+            order.setOrderContents(new ArrayList<OrderContent>());
         }
-        OrderContent currentOrderContent= new OrderContent();
+        OrderContent currentOrderContent = new OrderContent();
         currentOrderContent.setGood(new Good());
         order.getOrderContents().add(currentOrderContent);
     }
 
-    public int getAllGoodsSize(){
-        return getAllGoods().size();
-    }
-
-    public Collection<Good> getAllGoods(){
+    public Collection<Good> getAllGoods() {
         return goodsBean.getAllGoods();
     }
 }

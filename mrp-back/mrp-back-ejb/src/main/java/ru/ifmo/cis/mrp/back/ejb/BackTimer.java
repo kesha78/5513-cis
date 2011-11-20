@@ -30,36 +30,41 @@ public class BackTimer {
     @Resource(mappedName = "/topic/tickTopic")
     private Topic tickTopic;
 
+    private TopicConnection con = null;
+    private TopicSession ses = null;
+    private TopicPublisher sender = null;
+
     @EJB
     private SequenceOptimizer sequenceOptimizer;
 
     @PostConstruct
     public void scheduleTimer() {
-        LOGGER.info("[Timer] Scheduling timer after 5 seconds...");
+        LOGGER.info("[Timer] Scheduling timer after 15 seconds...");
         for (Timer t : sessionContext.getTimerService().getTimers()) {
             t.cancel();
         }
-        sessionContext.getTimerService().createIntervalTimer(5000, 5000, new TimerConfig(BACK_TIMER, true));
+        TopicConnectionFactory qcf = (TopicConnectionFactory) connectionFactory;
+        try {
+            con = qcf.createTopicConnection();
+            ses = con.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+            sender = ses.createPublisher(tickTopic);
+        } catch (JMSException e) {
+            LOGGER.error("Error while creating topic connection", e);
+        }
+        sessionContext.getTimerService().createIntervalTimer(15000, 5000, new TimerConfig(BACK_TIMER, true));
     }
 
     @Timeout
     public void timeout(final Timer timer) {
         if ((timer.getInfo() != null) && (timer.getInfo().equals(BACK_TIMER))) {
             LOGGER.info("[Back] Tick");
-            TopicConnection con;
-            TopicSession ses;
-            TopicPublisher sender;
             try {
-                TopicConnectionFactory qcf = (TopicConnectionFactory) connectionFactory;
-                con = qcf.createTopicConnection();
-                ses = con.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-                sender = ses.createPublisher(tickTopic);
-                ObjectMessage msg = ses.createObjectMessage(null);
-                //ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
-                sender.publish(msg);
-                sender.close();
-                ses.close();
-                con.close();
+                if (ses != null) {
+                    ObjectMessage msg = ses.createObjectMessage(null);
+                    //ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
+                    sender.publish(msg);
+                }
+
             } catch (JMSException e) {
                 LOGGER.error("Exception while sending order from front to back", e);
             }

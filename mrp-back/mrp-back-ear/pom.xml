@@ -62,7 +62,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>C:\jboss-6.1.0.Final\server\default\deploy
+                            <outputDirectory>/Users/Igor/Documents/jboss-6.1.0.Final/server/default/deploy
                             </outputDirectory>
                             <resources>
                                 <resource>
