@@ -1,14 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>ru.ifmo.cis</groupId>
-	    <artifactId>mrp</artifactId>
-	    <version>1.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>ru.ifmo.cis</groupId>
+        <artifactId>mrp</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <groupId>ru.ifmo.cis</groupId>
     <artifactId>mrp-imit</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>ejb</packaging>
     <name>MRP-5513-Imit</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.ifmo.cis</groupId>
+            <artifactId>mrp-entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <configuration>
+                    <ejbVersion>3.1</ejbVersion>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

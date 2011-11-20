@@ -14,6 +14,8 @@
         <class>ru.ifmo.cis.mrp.entity.MaterialStorage</class>
         <class>ru.ifmo.cis.mrp.entity.Supply</class>
         <class>ru.ifmo.cis.mrp.entity.SupplyRequest</class>
+        <class>ru.ifmo.cis.mrp.entity.Order</class>
+        <class>ru.ifmo.cis.mrp.entity.OrderContent</class>
         <class>ru.ifmo.cis.mrp.entity.User</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
