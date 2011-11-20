@@ -1,5 +1,7 @@
 package ru.ifmo.cis.mrp.back.ejb.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ifmo.cis.mrp.back.ejb.SequenceOptimizer;
 import ru.ifmo.cis.mrp.entity.Good;
 import ru.ifmo.cis.mrp.entity.OrderContent;
@@ -7,7 +9,7 @@ import ru.ifmo.cis.mrp.entity.OrderContent;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,20 +20,29 @@ import java.util.List;
 @Stateless
 public class SequenceOptimizerImpl implements SequenceOptimizer {
 
+    private LinkedList<Good> sequence;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SequenceOptimizerImpl.class);
+
     @PersistenceContext(unitName = "MRPPersistenceUnit")
     private EntityManager em;
 
-    private Collection<OrderContent> getAllOrderContent() {
-        return em.createQuery("from OrderContent").getResultList();
+    private void getBaseGoodsSequence() {
+        LOGGER.info("[Back] Getting base goods sequence.");
+        List<OrderContent> orderContentList = em.createQuery("from OrderContent ").getResultList();
+        sequence = new LinkedList<Good>();
+        for (OrderContent orderContent : orderContentList) {
+            for (long i = 0; i < orderContent.getCount(); ++i) {
+                sequence.add(orderContent.getGood());
+            }
+        }
+        LOGGER.info("[Back] Goods for optimization: " + sequence.size());
     }
 
     @Override
-    public List<Good> getSequence() {
-        return null;  //TODO: Implement that!
-    }
-
-    @Override
-    public List<Good> getSequence(Collection<Good> newCollection) {
-        return null;  //TODO: Implement that too!
+    public LinkedList<Good> getSequence() {
+        getBaseGoodsSequence(); //Fills sequence list from DB without any optimization
+        //TODO: Implement sequence optimization!
+        return sequence;
     }
 }

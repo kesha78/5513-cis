@@ -60,8 +60,8 @@ public class BackTimer {
             LOGGER.info("[Back] Tick");
             try {
                 if (ses != null) {
-                    ObjectMessage msg = ses.createObjectMessage(null);
-                    //ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence().toArray());
+                    //ObjectMessage msg = ses.createObjectMessage(null);
+                    ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
                     sender.publish(msg);
                 }
 

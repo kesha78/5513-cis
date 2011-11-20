@@ -3,8 +3,7 @@ package ru.ifmo.cis.mrp.back.ejb;
 import ru.ifmo.cis.mrp.entity.Good;
 
 import javax.ejb.Local;
-import java.util.Collection;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * User: Igor
@@ -13,8 +12,7 @@ import java.util.List;
  */
 @Local
 public interface SequenceOptimizer {
-    List<Good> getSequence();
 
-    List<Good> getSequence(Collection<Good> newCollection);
+    LinkedList<Good> getSequence();
 
 }
