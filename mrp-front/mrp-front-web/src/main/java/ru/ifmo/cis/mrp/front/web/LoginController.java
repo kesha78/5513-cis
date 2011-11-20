@@ -26,9 +26,11 @@ public class LoginController implements Serializable {
     private UserBean userBean;
 
     private User user;
+    
+    private String loginString=null;
 
-    public String login(String login) {
-        User user = userBean.findUserByLogin(login);
+    public String login() {
+        user = userBean.findUserByLogin(loginString);
         if (user != null) {
             return "order.xhtml";
         } else {
@@ -43,6 +45,16 @@ public class LoginController implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public void setLoginString(String loginString) {
+	this.loginString = loginString;
+    }
+
+
+    public String getLoginString() {
+	return loginString;
     }
 
 

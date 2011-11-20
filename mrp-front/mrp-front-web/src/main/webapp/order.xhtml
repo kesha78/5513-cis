@@ -11,6 +11,8 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
+            <h:outputLabel id="usernameLabel" for="username" value="#{userController.user.login}" />
+            
                 <p:dataTable id="orderTable"
                              var="order"
                              value="#{orderController.order.orderContents}"
@@ -58,7 +60,26 @@
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
+                    
+                    
+					<p:column filterBy="#{order.important}">
+                        <f:facet name="header">
+                            importance:
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{order.important}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <h:outputText value="Enabled : "/>
+                          		<h:selectBooleanCheckbox value="#{order.important}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
                 </p:dataTable>
+                
+                
                 <p:commandButton action="#{orderController.addGoodRequest}" update="orderTable"
                                  value="Add Good Request"/>
                 <p:commandButton action="#{orderController.sendOrder}" value="Send Order"/>

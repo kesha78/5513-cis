@@ -44,12 +44,13 @@
                 <executions>
                     <execution>
                         <id>copy-front-ear</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>/Users/Igor/Documents/jboss-6.1.0.Final/server/default/deploy
+                            <outputDirectory>
+                            	C:\jboss-6.1.0.Final\server\default\deploy
                             </outputDirectory>
                             <resources>
                                 <resource>

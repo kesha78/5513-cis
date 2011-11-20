@@ -11,10 +11,10 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
-            	<p:inputText value="#{loginController.login}" /> 
+            	<h:outputLabel id="usernameLabel" for="username" value="#{userController.user.login}" />
+            	<p:inputText value="#{loginController.loginString}" /> 
                 
                 <p:commandButton action="#{loginController.login}" value="Login"/>
-            
             </h:form>
         </ui:define>
     </ui:composition>
