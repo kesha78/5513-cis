@@ -2,7 +2,6 @@ package ru.ifmo.cis.mrp.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,19 +12,19 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "SUPPLY_REQUEST")
-public class SupplyRequest implements Serializable{
+public class SupplyRequest implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private Supply supply;
+    private Supply supply; //TODO:Collection
 
     @Column
-    private Date date;
+    private int date;
 
     @Column
-    private Date factDate;
+    private int factDate;
 
     @Column
     private boolean today;
@@ -46,19 +45,19 @@ public class SupplyRequest implements Serializable{
         this.supply = supply;
     }
 
-    public Date getDate() {
+    public int getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
-    public Date getFactDate() {
+    public int getFactDate() {
         return factDate;
     }
 
-    public void setFactDate(Date factDate) {
+    public void setFactDate(int factDate) {
         this.factDate = factDate;
     }
 

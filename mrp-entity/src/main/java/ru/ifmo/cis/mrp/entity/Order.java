@@ -1,8 +1,8 @@
 package ru.ifmo.cis.mrp.entity;
 
-import java.util.Collection;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,11 +12,11 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="ORDERS")
-public class Order implements Serializable{
+@Table(name = "ORDERS")
+public class Order implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2744101220848041077L;
 
@@ -26,6 +26,26 @@ public class Order implements Serializable{
 
     @OneToMany
     private Collection<OrderContent> orderContents;
+
+    private int t;
+
+    private int beginT;
+
+    public int getBeginT() {
+        return beginT;
+    }
+
+    public void setBeginT(int beginT) {
+        this.beginT = beginT;
+    }
+
+    public int getT() {
+        return t;
+    }
+
+    public void setT(int t) {
+        this.t = t;
+    }
 
     public Long getId() {
         return id;

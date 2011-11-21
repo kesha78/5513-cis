@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ifmo.cis.mrp.back.ejb.dao.OrderDao;
 import ru.ifmo.cis.mrp.entity.Order;
+import ru.ifmo.cis.mrp.entity.OrderContent;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -33,6 +34,8 @@ public class FrontReceiverBean implements MessageListener {
     @EJB
     OrderDao orderDao;
 
+    private int t;
+
     public FrontReceiverBean() {
     }
 
@@ -44,6 +47,20 @@ public class FrontReceiverBean implements MessageListener {
                 if (objectMessage.getObject() instanceof Order) {
                     Order receivedOrder = (Order) objectMessage.getObject();
                     LOGGER.info("[Back] Received Order");
+
+                    int currentTick = 2;
+                    for (OrderContent orderContent : receivedOrder.getOrderContents()) {
+                        if ("good1".equals(orderContent.getGood().getName())) {
+                            currentTick += Math.ceil(orderContent.getCount() / Production.x);
+                        } else if (("good2".equals(orderContent.getGood().getName()))) {
+                            currentTick += Math.ceil(orderContent.getCount() / Production.y);
+                        } else if (("good3".equals(orderContent.getGood().getName()))) {
+                            currentTick += Math.ceil(orderContent.getCount() / Production.z);
+                        }
+                    }
+                    receivedOrder.setBeginT(t);
+                    t += currentTick;
+                    receivedOrder.setT(currentTick);
                     orderDao.create(receivedOrder);
                 }
             } catch (JMSException e) {

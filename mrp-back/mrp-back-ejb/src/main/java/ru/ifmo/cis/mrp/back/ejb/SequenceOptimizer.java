@@ -1,6 +1,7 @@
 package ru.ifmo.cis.mrp.back.ejb;
 
 import ru.ifmo.cis.mrp.entity.Good;
+import ru.ifmo.cis.mrp.entity.SupplyRequest;
 
 import javax.ejb.Local;
 import java.util.LinkedList;
@@ -14,5 +15,9 @@ import java.util.LinkedList;
 public interface SequenceOptimizer {
 
     LinkedList<Good> getSequence();
+
+    SupplyRequest countSupplyRequest(int estimate);
+
+    SupplyRequest countStatisticSupply(int estimate, SupplyRequest supplyRequest);
 
 }

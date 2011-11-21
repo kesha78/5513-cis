@@ -33,6 +33,7 @@ public class BackTimer {
     private TopicConnection con = null;
     private TopicSession ses = null;
     private TopicPublisher sender = null;
+    public int supplyTimer = 0;
 
     @EJB
     private SequenceOptimizer sequenceOptimizer;
@@ -61,8 +62,12 @@ public class BackTimer {
             try {
                 if (ses != null) {
                     //ObjectMessage msg = ses.createObjectMessage(null);
-                    ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
-                    sender.publish(msg);
+                    ++supplyTimer;
+                    if (supplyTimer % Production.supplyRequestTime == 0) {
+                        ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
+                        msg.setBooleanProperty("supplyTime", true);
+                        sender.publish(msg);
+                    }
                 }
 
             } catch (JMSException e) {

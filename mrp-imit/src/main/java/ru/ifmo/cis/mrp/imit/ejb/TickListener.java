@@ -36,6 +36,9 @@ public class TickListener implements MessageListener {
                 ObjectMessage objectMessage = (ObjectMessage) message;
                 List<Good> goodSequence = (LinkedList<Good>) objectMessage.getObject();
                 LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
+                if (objectMessage.propertyExists("supplyTime") && objectMessage.getBooleanProperty("supplyTime")) { //TODO:supplyRequestId vmesto supplyTime
+
+                }
                 //TODO: WORK WITH THAT SEQUENCE
             } catch (JMSException e) {
                 LOGGER.error("Exception while receiving goods sequence.");
