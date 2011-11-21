@@ -6,8 +6,11 @@ import ru.ifmo.cis.mrp.entity.User;
 import ru.ifmo.cis.mrp.front.ejb.UserBean;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
 import java.io.Serializable;
 
 
@@ -29,11 +32,14 @@ public class LoginController implements Serializable {
     
     private String loginString=null;
 
-    public String login() {
+    public String doLogin() {
         user = userBean.findUserByLogin(loginString);
         if (user != null) {
             return "order.xhtml";
         } else {
+    		FacesContext.
+    		getCurrentInstance().
+    		addMessage("login", new FacesMessage("Error"));
             return "login.xhtml";
         }
     }
@@ -50,6 +56,10 @@ public class LoginController implements Serializable {
 
     public void setLoginString(String loginString) {
 	this.loginString = loginString;
+	FacesContext.
+		getCurrentInstance().
+		addMessage("login", new FacesMessage("Error"));
+
     }
 
 
