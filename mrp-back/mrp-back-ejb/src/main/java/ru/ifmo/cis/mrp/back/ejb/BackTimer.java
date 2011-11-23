@@ -2,6 +2,7 @@ package ru.ifmo.cis.mrp.back.ejb;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ifmo.cis.mrp.entity.SupplyRequest;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -10,7 +11,6 @@ import javax.ejb.*;
 import javax.jms.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 /**
  * User: Igor
@@ -84,10 +84,13 @@ public class BackTimer {
                     ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
                     if (Production.supplyRequestTime - 1 - (supplyTimer % Production.supplyRequestTime) == 0) {
                         LOGGER.info("[Back] It's supply request time!");
-                        List supplies = em.createQuery("from SupplyRequest order by id desc").setMaxResults(1).getResultList();
+                        SupplyRequest supplyRequest = sequenceOptimizer.countSupplyRequest(Production.supplyTime); //TODO:??? supplyTime
+                        //supplyRequest=em.merge(supplyRequest);
+                        msg.setObjectProperty("supplyRequest", supplyRequest);
+                        /*List supplies = em.createQuery("from SupplyRequest order by id desc").setMaxResults(1).getResultList();
                         if (supplies.size() == 1) {
                             msg.setObjectProperty("supplyRequest", supplies.get(0));
-                        }
+                        }*/
                     }
                     sender.publish(msg);
 
