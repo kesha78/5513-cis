@@ -15,4 +15,6 @@ public interface OrderSenderBean {
 
     void sendOrder(Order order);
 
+    void sendOrderType(String type);
+
 }

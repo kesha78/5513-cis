@@ -11,8 +11,8 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="ORDER_CONTENT")
-public class OrderContent implements Serializable{
+@Table(name = "ORDER_CONTENT")
+public class OrderContent implements Serializable {
 
     @Id
     @GeneratedValue
@@ -24,8 +24,6 @@ public class OrderContent implements Serializable{
     @Column(nullable = false)
     private Long count;
 
-    private String important;
-    
     public Long getId() {
         return id;
     }
@@ -50,11 +48,4 @@ public class OrderContent implements Serializable{
         this.count = count;
     }
 
-    public void setImportant(String important) {
-	this.important = important;
-    }
-
-    public String getImportant() {
-	return important;
-    }
 }

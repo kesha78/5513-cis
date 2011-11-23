@@ -7,18 +7,23 @@
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:body>
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
-            <h:outputLabel id="usernameLabel" for="username" value="#{userController.user.login}" />
-            
+                <h:outputText value="#{loginController.user.login}"/>
+
+                <p align="right"><p:commandButton action="#{changeTypeController.changeOrderStyle}" id="changeType"
+                                                  value="#{changeTypeController.currentOrderStyle}"
+                                                  update="changeType"/></p>
+
                 <p:dataTable id="orderTable"
                              var="order"
                              value="#{orderController.order.orderContents}"
                              paginator="true"
                              rows="10">
+
 
                     <f:facet name="header">
                         Order Details:
@@ -48,7 +53,7 @@
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column filterBy="#{order.count}">
+                    <p:column>
                         <f:facet name="header">
                             Count:
                         </f:facet>
@@ -58,32 +63,16 @@
                             </f:facet>
                             <f:facet name="input">
                                 <p:inputText id="count" value="#{order.count}">
-                                	<f:validateLongRange minimum="1" />
+                                    <f:validateLongRange minimum="1"/>
                                 </p:inputText>
                                 <h:message for="count"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
-                    
-                    
-					<p:column filterBy="#{order.important}">
-                        <f:facet name="header">
-                            importance:
-                        </f:facet>
-                        <p:cellEditor>
-                            <f:facet name="output">
-                            	<h:outputText value="#{order.important}"/>
-                            </f:facet>
-                            <f:facet name="input">
-                                <h:outputText value="Enabled : "/>
-                          		<h:selectBooleanCheckbox value="#{order.important}"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
                 </p:dataTable>
-                
-                
+                <h:outputText value="Important: "/>
+                <h:selectBooleanCheckbox value="#{orderController.order.important}"/>
+
                 <p:commandButton action="#{orderController.addGoodRequest}" update="orderTable"
                                  value="Add Good Request"/>
                 <p:commandButton action="#{orderController.sendOrder}" value="Send Order"/>

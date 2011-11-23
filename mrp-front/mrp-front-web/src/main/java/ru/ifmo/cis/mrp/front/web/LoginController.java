@@ -8,38 +8,33 @@ import ru.ifmo.cis.mrp.front.ejb.UserBean;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-
 import java.io.Serializable;
 
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class LoginController implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1796101007168126159L;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @EJB
     private UserBean userBean;
 
     private User user;
-    
-    private String loginString=null;
+
+    private String loginString;
 
     public String doLogin() {
+        LOGGER.info("Trying to login...");
         user = userBean.findUserByLogin(loginString);
         if (user != null) {
             return "order.xhtml";
         } else {
-    		FacesContext.
-    		getCurrentInstance().
-    		addMessage("login", new FacesMessage("Error"));
+            FacesContext.
+                    getCurrentInstance().
+                    addMessage("login", new FacesMessage("Error"));
             return "login.xhtml";
         }
     }
@@ -55,16 +50,15 @@ public class LoginController implements Serializable {
 
 
     public void setLoginString(String loginString) {
-	this.loginString = loginString;
-	FacesContext.
-		getCurrentInstance().
-		addMessage("login", new FacesMessage("Error"));
-
+        this.loginString = loginString;
+        FacesContext.
+                getCurrentInstance().
+                addMessage("login", new FacesMessage("Error"));
     }
 
 
     public String getLoginString() {
-	return loginString;
+        return loginString;
     }
 
 

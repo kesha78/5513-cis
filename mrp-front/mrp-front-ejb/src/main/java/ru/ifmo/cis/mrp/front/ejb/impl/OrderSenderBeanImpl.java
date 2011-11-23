@@ -41,11 +41,51 @@ public class OrderSenderBeanImpl implements OrderSenderBean {
             sender = ses.createSender(frontBackQueue);
             ObjectMessage msg = ses.createObjectMessage(order);
             sender.send(msg);
-            sender.close();
-            ses.close();
-            con.close();
         } catch (JMSException e) {
             LOGGER.error("Exception while sending order from front to back", e);
+        } finally {
+            try {
+                if (sender != null)
+                    sender.close();
+                if (ses != null)
+                    ses.close();
+                if (con != null)
+                    con.close();
+            } catch (JMSException e) {
+                LOGGER.error("Exception while closing JMS session", e);
+            }
+
+        }
+
+    }
+
+    @Override
+    public void sendOrderType(String type) {
+        LOGGER.info("[Front] Sending changeType request");
+        QueueConnection con = null;
+        QueueSession ses = null;
+        QueueSender sender = null;
+        try {
+            QueueConnectionFactory qcf = (QueueConnectionFactory) connectionFactory;
+            con = qcf.createQueueConnection();
+            ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+            sender = ses.createSender(frontBackQueue);
+            TextMessage msg = ses.createTextMessage(type);
+            sender.send(msg);
+        } catch (JMSException e) {
+            LOGGER.error("Exception while sending changeType request from front to back", e);
+        } finally {
+            try {
+                if (sender != null)
+                    sender.close();
+                if (ses != null)
+                    ses.close();
+                if (con != null)
+                    con.close();
+            } catch (JMSException e) {
+                LOGGER.error("Exception while closing JMS session", e);
+            }
+
         }
     }
 }

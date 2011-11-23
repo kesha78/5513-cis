@@ -11,13 +11,11 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
-            	<p:inputText id="login" value="#{loginController.loginString}">
-            		<f:validateRegex pattern="[a-zA-Z]"/>
-            		
-            	</p:inputText> 
+                <p:inputText id="login" value="#{loginController.loginString}">
+                    <f:validateRegex pattern="[a-zA-Z]"/>
+
+                </p:inputText>
                 <h:message for="login"/>
-                <h:message for="existence"/>
-                
                 <h:commandButton action="#{loginController.doLogin}" value="Login"/>
             </h:form>
         </ui:define>

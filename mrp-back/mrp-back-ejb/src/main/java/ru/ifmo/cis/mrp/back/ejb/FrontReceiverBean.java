@@ -10,10 +10,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionManagement;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
+import javax.jms.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,21 +31,21 @@ public class FrontReceiverBean implements MessageListener {
     @EJB
     OrderDao orderDao;
 
-    private int t;
+    private Long t;
 
     public FrontReceiverBean() {
     }
 
     @Override
     public void onMessage(Message message) {
-        if (message instanceof ObjectMessage) {
+        if (message instanceof ObjectMessage) {       // ORDER
             ObjectMessage objectMessage = (ObjectMessage) message;
             try {
                 if (objectMessage.getObject() instanceof Order) {
                     Order receivedOrder = (Order) objectMessage.getObject();
                     LOGGER.info("[Back] Received Order");
                     //
-                    int currentTick = 2;
+                    long currentTick = 2;
                     for (OrderContent orderContent : receivedOrder.getOrderContents()) {
                         if ("good1".equals(orderContent.getGood().getName())) {
                             currentTick += Math.ceil(orderContent.getCount() / Production.x);
@@ -65,6 +62,13 @@ public class FrontReceiverBean implements MessageListener {
                 }
             } catch (JMSException e) {
                 LOGGER.error("Exception while receiving message", e);
+            }
+        } else if (message instanceof TextMessage) {  //changeType request
+            TextMessage txtMessage = (TextMessage) message;
+            try {
+                LOGGER.info("[Back] Received changeType request to " + txtMessage.getText());
+            } catch (JMSException e) {
+                LOGGER.error("Exception while getting changeType request", e);
             }
         }
     }

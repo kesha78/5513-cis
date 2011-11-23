@@ -2,6 +2,7 @@ package ru.ifmo.cis.mrp.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,8 +18,8 @@ public class SupplyRequest implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    private Supply supply; //TODO:Collection
+    @OneToMany
+    private Collection<Supply> supplies;
 
     @Column
     private int date;
@@ -37,12 +38,12 @@ public class SupplyRequest implements Serializable {
         this.id = id;
     }
 
-    public Supply getSupply() {
-        return supply;
+    public Collection<Supply> getSupplies() {
+        return supplies;
     }
 
-    public void setSupply(Supply supply) {
-        this.supply = supply;
+    public void setSupplies(Collection<Supply> supplies) {
+        this.supplies = supplies;
     }
 
     public int getDate() {

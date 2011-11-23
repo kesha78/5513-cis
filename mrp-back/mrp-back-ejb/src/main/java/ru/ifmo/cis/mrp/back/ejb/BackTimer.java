@@ -40,7 +40,7 @@ public class BackTimer {
 
     @PostConstruct
     public void scheduleTimer() {
-        LOGGER.info("[Timer] Scheduling timer after 15 seconds...");
+        LOGGER.info("[Timer] Scheduling timer after 20 seconds...");
         for (Timer t : sessionContext.getTimerService().getTimers()) {
             t.cancel();
         }
@@ -52,7 +52,7 @@ public class BackTimer {
         } catch (JMSException e) {
             LOGGER.error("Error while creating topic connection", e);
         }
-        sessionContext.getTimerService().createIntervalTimer(15000, 5000, new TimerConfig(BACK_TIMER, true));
+        sessionContext.getTimerService().createIntervalTimer(20000, 5000, new TimerConfig(BACK_TIMER, true));
     }
 
     @Timeout

@@ -15,11 +15,6 @@ import java.util.Collection;
 @Table(name = "ORDERS")
 public class Order implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -2744101220848041077L;
-
     @Id
     @GeneratedValue
     private Long id;
@@ -27,25 +22,11 @@ public class Order implements Serializable {
     @OneToMany
     private Collection<OrderContent> orderContents;
 
-    private int t;
+    private Boolean important;
 
-    private int beginT;
+    private Long t;
 
-    public int getBeginT() {
-        return beginT;
-    }
-
-    public void setBeginT(int beginT) {
-        this.beginT = beginT;
-    }
-
-    public int getT() {
-        return t;
-    }
-
-    public void setT(int t) {
-        this.t = t;
-    }
+    private Long beginT;
 
     public Long getId() {
         return id;
@@ -53,6 +34,30 @@ public class Order implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getImportant() {
+        return important;
+    }
+
+    public void setImportant(Boolean important) {
+        this.important = important;
+    }
+
+    public Long getT() {
+        return t;
+    }
+
+    public void setT(Long t) {
+        this.t = t;
+    }
+
+    public Long getBeginT() {
+        return beginT;
+    }
+
+    public void setBeginT(Long beginT) {
+        this.beginT = beginT;
     }
 
     public Collection<OrderContent> getOrderContents() {
