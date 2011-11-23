@@ -3,6 +3,7 @@ package ru.ifmo.cis.mrp.imit.ejb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ifmo.cis.mrp.entity.Good;
+import ru.ifmo.cis.mrp.entity.SupplyRequest;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -37,7 +38,13 @@ public class TickListener implements MessageListener {
                 ObjectMessage objectMessage = (ObjectMessage) message;
                 List<Good> goodSequence = (LinkedList<Good>) objectMessage.getObject();
                 LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
-                if (objectMessage.propertyExists("supplyTime") && objectMessage.getBooleanProperty("supplyTime")) { //TODO:supplyRequestId vmesto supplyTime
+                if (objectMessage.propertyExists("supplyRequest")) {
+                    SupplyRequest supplyRequest = (SupplyRequest) objectMessage.getObjectProperty("supplyRequest");
+                    if (supplyRequest != null) {
+                        LOGGER.info("[Imit] Got supplyRequest with id= " + supplyRequest.getId());
+                    } else {
+                        LOGGER.info("[Imit] Got supplyRequest, but it's empty :(");
+                    }
                 }
                 //TODO: WORK WITH THAT SEQUENCE
             } catch (JMSException e) {

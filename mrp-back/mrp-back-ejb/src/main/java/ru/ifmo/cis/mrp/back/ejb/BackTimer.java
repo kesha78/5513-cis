@@ -4,9 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.jms.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * User: Igor
@@ -20,6 +24,10 @@ public class BackTimer {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackTimer.class);
 
     private static final String BACK_TIMER = "Back_timer";
+
+    @PersistenceContext(unitName = "MRPPersistenceUnit")
+    private EntityManager em;
+
 
     @Resource
     private SessionContext sessionContext;
@@ -55,21 +63,36 @@ public class BackTimer {
         sessionContext.getTimerService().createIntervalTimer(20000, 5000, new TimerConfig(BACK_TIMER, true));
     }
 
+    @PreDestroy
+    public void destroy() {
+        try {
+            sender.close();
+            ses.close();
+            con.close();
+        } catch (JMSException e) {
+            LOGGER.error("Exception while closing BackTimer JMS", e);
+        }
+    }
+
+
     @Timeout
     public void timeout(final Timer timer) {
         if ((timer.getInfo() != null) && (timer.getInfo().equals(BACK_TIMER))) {
-            LOGGER.info("[Back] Tick");
+            LOGGER.info("[Back] Tick (Ticks to Supply request: " + (Production.supplyRequestTime - (supplyTimer % Production.supplyRequestTime) - 1) + ")");
             try {
                 if (ses != null) {
-                    //ObjectMessage msg = ses.createObjectMessage(null);
-                    ++supplyTimer;
-                    if (supplyTimer % Production.supplyRequestTime == 0) {
-                        ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
-                        msg.setBooleanProperty("supplyTime", true);
-                        sender.publish(msg);
+                    ObjectMessage msg = ses.createObjectMessage(sequenceOptimizer.getSequence());
+                    if (Production.supplyRequestTime - 1 - (supplyTimer % Production.supplyRequestTime) == 0) {
+                        LOGGER.info("[Back] It's supply request time!");
+                        List supplies = em.createQuery("from SupplyRequest order by id desc").setMaxResults(1).getResultList();
+                        if (supplies.size() == 1) {
+                            msg.setObjectProperty("supplyRequest", supplies.get(0));
+                        }
                     }
-                }
+                    sender.publish(msg);
 
+                }
+                ++supplyTimer;
             } catch (JMSException e) {
                 LOGGER.error("Exception while sending order from front to back", e);
             }

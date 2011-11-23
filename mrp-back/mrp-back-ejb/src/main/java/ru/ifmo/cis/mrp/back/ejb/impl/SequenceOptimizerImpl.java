@@ -29,7 +29,6 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
     private EntityManager em;
 
     private void getBaseGoodsSequence() {
-        LOGGER.info("[Back] Getting base goods sequence.");
         List<OrderContent> orderContentList = em.createQuery("from OrderContent ").getResultList();
         sequence = new LinkedList<Good>();
         for (OrderContent orderContent : orderContentList) {
@@ -37,7 +36,6 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
                 sequence.add(orderContent.getGood());
             }
         }
-        LOGGER.info("[Back] Goods for optimization: " + sequence.size());
     }
 
     @Override
