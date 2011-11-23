@@ -6,14 +6,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="USERS")
+@Table(name = "USERS")
 public class User {
 
     @Id
     @GeneratedValue
     private Long id;
+
     private String login;
-    
+
     public Long getId() {
         return id;
     }

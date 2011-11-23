@@ -11,9 +11,9 @@
     <ui:composition template="template/template.xhtml">
         <ui:define name="content">
             <h:form>
+                <p:growl id="growl" showDetail="true"/>
                 <p:inputText id="login" value="#{loginController.loginString}">
-                    <f:validateRegex pattern="[a-zA-Z]"/>
-
+                    <f:validateRegex pattern="[a-zA-Z]+"/>
                 </p:inputText>
                 <h:message for="login"/>
                 <h:commandButton action="#{loginController.doLogin}" value="Login"/>

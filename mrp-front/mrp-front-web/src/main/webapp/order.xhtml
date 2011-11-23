@@ -14,7 +14,8 @@
             <h:form>
                 <h:outputText value="#{loginController.user.login}"/>
 
-                <p align="right"><p:commandButton action="#{changeTypeController.changeOrderStyle}" id="changeType"
+                <p align="right"><p:commandButton actionListener="#{changeTypeController.changeOrderStyle}"
+                                                  id="changeType"
                                                   value="#{changeTypeController.currentOrderStyle}"
                                                   update="changeType"/></p>
 

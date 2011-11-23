@@ -32,10 +32,8 @@ public class LoginController implements Serializable {
         if (user != null) {
             return "order.xhtml";
         } else {
-            FacesContext.
-                    getCurrentInstance().
-                    addMessage("login", new FacesMessage("Error"));
-            return "login.xhtml";
+            FacesContext.getCurrentInstance().addMessage("login", new FacesMessage("Error"));
+            return null;
         }
     }
 
@@ -51,9 +49,6 @@ public class LoginController implements Serializable {
 
     public void setLoginString(String loginString) {
         this.loginString = loginString;
-        FacesContext.
-                getCurrentInstance().
-                addMessage("login", new FacesMessage("Error"));
     }
 
 
