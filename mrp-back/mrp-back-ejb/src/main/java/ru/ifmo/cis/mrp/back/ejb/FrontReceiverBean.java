@@ -31,7 +31,7 @@ public class FrontReceiverBean implements MessageListener {
     @EJB
     OrderDao orderDao;
 
-    private Long t;
+    private long t = 0;
 
     public FrontReceiverBean() {
     }

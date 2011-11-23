@@ -2,7 +2,6 @@ package ru.ifmo.cis.mrp.back.ejb.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ifmo.cis.mrp.back.ejb.Production;
 import ru.ifmo.cis.mrp.back.ejb.SequenceOptimizer;
 import ru.ifmo.cis.mrp.entity.*;
 
@@ -53,20 +52,17 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
         getBaseGoodsSequence(); //Fills sequence list from DB without any optimization
         SupplyRequest supplyRequest = new SupplyRequest();
         Map<Material, Long> materialRequest = createEmptyMaterialMap();
-        for (Good good : sequence.subList(0, estimate)) {
+        if (sequence.size() > estimate) {
+            sequence = (LinkedList<Good>) sequence.subList(0, estimate);
+        }
+        for (Good good : sequence) {
             try {
                 List<MaterialsToGoods> materialsToGoodsList = em.createQuery("from MaterialsToGoods where good=:good").setParameter("good", good).getResultList();
                 for (MaterialsToGoods materialsToGoods : materialsToGoodsList) {
                     if (materialsToGoods.getGood().getName().equals(good.getName())) {
                         for (Entry<Material, Long> entry : materialRequest.entrySet()) {
                             if (entry.getKey().getName().equals(materialsToGoods.getMaterial().getName())) {
-                                if ("good1".equals(good.getName())) {
-                                    entry.setValue(entry.getValue() + materialsToGoods.getCount() * Production.x);
-                                } else if ("good2".equals(good.getName())) {
-                                    entry.setValue(entry.getValue() + materialsToGoods.getCount() * Production.y);
-                                } else if ("good3".equals(good.getName())) {
-                                    entry.setValue(entry.getValue() + materialsToGoods.getCount() * Production.z);
-                                }
+                                entry.setValue(entry.getValue() + materialsToGoods.getCount());
                             }
                         }
                     }
@@ -76,12 +72,20 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
                 LOGGER.error("[Back] No materials for " + good.getName() + "!");
             }
         }
-        for (Entry<Material, Long> entry : materialRequest.entrySet()) {
-            Supply supply = new Supply();
-            supply.setMaterial(entry.getKey());
-            supply.setCount(entry.getValue());
-            supplyRequest.getSupplies().add(supply);
-            LOGGER.info("[Back] SUPPLY: " + supply.getMaterial().getName() + " - " + supply.getCount());
+        List<MaterialStorage> materialStorageList = em.createQuery("from MaterialStorage").getResultList();
+        for (MaterialStorage materialStorage : materialStorageList) {
+            for (Entry<Material, Long> entry : materialRequest.entrySet()) {
+                if (entry.getKey().getName().equals(materialStorage.getMaterial().getName())) {
+                    Supply supply = new Supply();
+                    supply.setMaterial(entry.getKey());
+                    long count = entry.getValue() - materialStorage.getCount(); // look at material storage for existence materials.
+                    if (count < 0) count = 0;
+                    supply.setCount(count);
+                    supplyRequest.setSupplies(new LinkedList<Supply>());
+                    supplyRequest.getSupplies().add(supply);
+                    LOGGER.info("[Back] SUPPLY: " + supply.getMaterial().getName() + " - " + count);
+                }
+            }
         }
         return supplyRequest;
     }
