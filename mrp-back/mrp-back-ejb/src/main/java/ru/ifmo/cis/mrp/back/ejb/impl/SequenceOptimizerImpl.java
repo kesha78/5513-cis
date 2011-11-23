@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.ifmo.cis.mrp.back.ejb.SequenceOptimizer;
 import ru.ifmo.cis.mrp.entity.Good;
 import ru.ifmo.cis.mrp.entity.OrderContent;
+import ru.ifmo.cis.mrp.entity.SupplyRequest;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -44,5 +45,15 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
         getBaseGoodsSequence(); //Fills sequence list from DB without any optimization
         //TODO: Implement sequence optimization!
         return sequence;
+    }
+
+    @Override
+    public SupplyRequest countSupplyRequest(int estimate) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public SupplyRequest countStatisticSupply(int estimate, SupplyRequest supplyRequest) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

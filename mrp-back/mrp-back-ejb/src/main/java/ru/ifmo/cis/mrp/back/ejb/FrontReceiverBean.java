@@ -47,7 +47,7 @@ public class FrontReceiverBean implements MessageListener {
                 if (objectMessage.getObject() instanceof Order) {
                     Order receivedOrder = (Order) objectMessage.getObject();
                     LOGGER.info("[Back] Received Order");
-
+                    //
                     int currentTick = 2;
                     for (OrderContent orderContent : receivedOrder.getOrderContents()) {
                         if ("good1".equals(orderContent.getGood().getName())) {

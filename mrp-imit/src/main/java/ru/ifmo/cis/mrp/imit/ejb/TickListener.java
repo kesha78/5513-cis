@@ -28,6 +28,7 @@ public class TickListener implements MessageListener {
     @PersistenceContext(unitName = "MRPPersistenceUnit")
     EntityManager em;
 
+    List<Good> goodHistory; //TODO
 
     @Override
     public void onMessage(Message message) {
@@ -37,7 +38,6 @@ public class TickListener implements MessageListener {
                 List<Good> goodSequence = (LinkedList<Good>) objectMessage.getObject();
                 LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
                 if (objectMessage.propertyExists("supplyTime") && objectMessage.getBooleanProperty("supplyTime")) { //TODO:supplyRequestId vmesto supplyTime
-
                 }
                 //TODO: WORK WITH THAT SEQUENCE
             } catch (JMSException e) {
