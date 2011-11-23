@@ -65,9 +65,12 @@ public class BackTimer {
     @PreDestroy
     public void destroy() {
         try {
-            sender.close();
-            ses.close();
-            con.close();
+            if (sender != null)
+                sender.close();
+            if (ses != null)
+                ses.close();
+            if (con != null)
+                con.close();
         } catch (JMSException e) {
             LOGGER.error("Exception while closing BackTimer JMS", e);
         }

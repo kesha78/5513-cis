@@ -41,7 +41,7 @@ public class TickListener implements MessageListener {
                 ObjectMessage objectMessage = (ObjectMessage) message;
                 if (objectMessage.getObject() instanceof LinkedList) { //sequence
                     List<Good> goodSequence = (LinkedList<Good>) objectMessage.getObject();
-                    LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
+                    createGoods(goodSequence);
 
                     checkSupplyCounter();
 
@@ -55,6 +55,11 @@ public class TickListener implements MessageListener {
                 LOGGER.error("Exception while receiving message from TickTopic.");
             }
         }
+    }
+
+    private void createGoods(List<Good> goodSequence) {
+        LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
+        //TODO:MAKE CREATE GOODS
     }
 
     private void startSupplyCounter(SupplyRequest supplyRequest) throws JMSException {

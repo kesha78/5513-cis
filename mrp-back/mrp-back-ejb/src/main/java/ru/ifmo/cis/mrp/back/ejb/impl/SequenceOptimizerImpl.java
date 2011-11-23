@@ -49,8 +49,10 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
 
     @Override
     public SupplyRequest countSupplyRequest(int estimate) {
+        LOGGER.info("[Back] Starting to count supply request");
         getBaseGoodsSequence(); //Fills sequence list from DB without any optimization
         SupplyRequest supplyRequest = new SupplyRequest();
+        supplyRequest.setSupplies(new LinkedList<Supply>());
         Map<Material, Long> materialRequest = createEmptyMaterialMap();
         if (sequence.size() > estimate) {
             sequence = (LinkedList<Good>) sequence.subList(0, estimate);
@@ -73,6 +75,12 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
             }
         }
         List<MaterialStorage> materialStorageList = em.createQuery("from MaterialStorage").getResultList();
+
+        if (materialStorageList.size() == 0) {
+            initMaterialStorage();
+        }
+
+        materialStorageList = em.createQuery("from MaterialStorage").getResultList();
         for (MaterialStorage materialStorage : materialStorageList) {
             for (Entry<Material, Long> entry : materialRequest.entrySet()) {
                 if (entry.getKey().getName().equals(materialStorage.getMaterial().getName())) {
@@ -81,7 +89,6 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
                     long count = entry.getValue() - materialStorage.getCount(); // look at material storage for existence materials.
                     if (count < 0) count = 0;
                     supply.setCount(count);
-                    supplyRequest.setSupplies(new LinkedList<Supply>());
                     supplyRequest.getSupplies().add(supply);
                     LOGGER.info("[Back] SUPPLY: " + supply.getMaterial().getName() + " - " + count);
                 }
@@ -97,6 +104,18 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
             materialsToRequest.put(material, (long) 0);
         }
         return materialsToRequest;
+    }
+
+
+    private void initMaterialStorage() {
+        LOGGER.info("[Back] Setting up materialStorage for first check...");
+        List<Material> materials = em.createQuery("from Material").getResultList();
+        for (Material material : materials) {
+            MaterialStorage materialStorage = new MaterialStorage();
+            materialStorage.setMaterial(material);
+            materialStorage.setCount((long) 0);
+            em.persist(materialStorage);
+        }
     }
 
     @Override
