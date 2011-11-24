@@ -32,12 +32,32 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
 
     private void getBaseGoodsSequence() {
         List<OrderContent> orderContentList = em.createQuery("from OrderContent ").getResultList();
+        List<GoodStorage> goodStorageList = em.createQuery("from GoodStorage ").getResultList();
+        em.detach(goodStorageList);
         sequence = new LinkedList<Good>();
         for (OrderContent orderContent : orderContentList) {
             for (long i = 0; i < orderContent.getCount(); ++i) {
-                sequence.add(orderContent.getGood());
+                boolean shouldAdd = true;
+                if (!goodStorageList.isEmpty()) {
+                    LOGGER.info("[Back] Checking the goodStorage to generate base goods sequence. Good storage size is" + goodStorageList.size());
+                    for (GoodStorage goodStorage : goodStorageList) {
+                        if (goodStorage.getGood().getName().equals(orderContent.getGood().getName())) {
+                            if (goodStorage.getCount() > 0) {
+                                LOGGER.info("[Back] Good " + goodStorage.getGood().getName() + " already on storage.");
+                                shouldAdd = false;
+                                em.detach(goodStorage);
+                                goodStorage.setCount(goodStorage.getCount() - 1);
+                            }
+                        }
+                    }
+                }
+                if (shouldAdd) {
+                    sequence.add(orderContent.getGood());
+                }
             }
         }
+
+
     }
 
     @Override

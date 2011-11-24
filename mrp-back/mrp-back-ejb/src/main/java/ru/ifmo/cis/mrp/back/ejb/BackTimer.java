@@ -59,7 +59,7 @@ public class BackTimer {
         } catch (JMSException e) {
             LOGGER.error("Error while creating topic connection", e);
         }
-        sessionContext.getTimerService().createIntervalTimer(20000, 5000, new TimerConfig(BACK_TIMER, true));
+        sessionContext.getTimerService().createIntervalTimer(30000, 1000, new TimerConfig(BACK_TIMER, true));
     }
 
     @PreDestroy

@@ -12,6 +12,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,15 +59,96 @@ public class TickListener implements MessageListener {
         }
     }
 
+    private boolean checkMaterialsEnough(Good good) {
+        List<MaterialsToGoods> materialsToGoods = (List<MaterialsToGoods>) em.createQuery("from MaterialsToGoods where good.name=:name").
+                setParameter("name", good.getName()).getResultList();
+        List<MaterialStorage> materialStorageList = em.createQuery("from MaterialStorage").getResultList();
+        if (materialStorageList.size() == 0) {
+            for (Material material : (List<Material>) em.createQuery("from Material").getResultList()) {
+                MaterialStorage materialStorage = new MaterialStorage();
+                materialStorage.setMaterial(material);
+                materialStorage.setCount((long) 0);
+            }
+            LOGGER.info("[Imit] Not enough materials, materialStorage is empty");
+            return false;
+        } else {
+
+            for (MaterialsToGoods toGoods : materialsToGoods) {
+                for (MaterialStorage materialStorage : materialStorageList) {
+                    if (materialStorage.getMaterial().getName().equals(toGoods.getMaterial().getName())) {
+                        if (materialStorage.getCount() < toGoods.getCount()) {
+                            LOGGER.info("[Imit] ----------------- Need " + toGoods.getCount() + " of " + toGoods.getMaterial().getName() + " ,but there is only " + materialStorage.getCount() + " of " + materialStorage.getMaterial().getName());
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    //add Good to the storage
+    private void createGood(Good good) {
+        List<MaterialsToGoods> materialsToGoods = (List<MaterialsToGoods>) em.createQuery("from MaterialsToGoods where good.name=:name").
+                setParameter("name", good.getName()).getResultList();
+        List<MaterialStorage> materialStorageList = em.createQuery("from MaterialStorage").getResultList();
+        for (MaterialsToGoods toGoods : materialsToGoods) {
+            for (MaterialStorage materialStorage : materialStorageList) {
+                if (materialStorage.getMaterial().getName().equals(toGoods.getMaterial().getName())) {
+                    materialStorage.setCount(materialStorage.getCount() - toGoods.getCount());
+                    LOGGER.info("[Imit] Removed " + toGoods.getCount() + " " + materialStorage.getMaterial().getName());
+                    em.merge(materialStorage);
+                }
+            }
+        }
+        try {
+            GoodStorage goodStorage = (GoodStorage) em.createQuery("from GoodStorage where good.name = :goodName").setParameter("goodName", good.getName()).getSingleResult();
+            goodStorage.setCount(goodStorage.getCount() + 1);
+            LOGGER.info("[Imit] Create non-first " + good.getName());
+            em.persist(goodStorage);
+        } catch (NoResultException e) {
+            GoodStorage goodStorage = new GoodStorage();
+            goodStorage.setGood(good);
+            goodStorage.setCount((long) 1);
+            LOGGER.info("[Imit] Create first " + good.getName());
+            em.persist(goodStorage);
+        } catch (NonUniqueResultException e) {
+            LOGGER.info("[Imit] NonUnique GoodStorage!!");
+        }
+
+    }
+
+
     private void createGoods(List<Good> goodSequence) {
         LOGGER.info("[Imit] Got goods sequence. Size is: " + goodSequence.size());
-        //TODO:MAKE CREATE GOODS
+        //add good only if it's name equals first element's name
+        List<Good> goodsToCreate = new LinkedList<Good>();
+        for (Good good : goodSequence) {
+            if (goodsToCreate.size() == 0) {
+                goodsToCreate.add(good);
+            } else {
+                if (good.getName().equals(goodsToCreate.get(0).getName())) {
+                    goodsToCreate.add(good);
+                } else {
+                    break;
+                }
+            }
+            if (goodsToCreate.size() > 0) {
+                for (Good goodToDo : goodsToCreate) {
+                    if (checkMaterialsEnough(goodToDo)) {
+                        createGood(goodToDo);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void startSupplyCounter(SupplyRequest supplyRequest) throws JMSException {
         if (supplyRequest != null) {
             if (supplyRequest.getSupplies() != null) {
-                LOGGER.info("[Imit] Got supplyRequest");
+                LOGGER.info("[Imit] Got supplyRequest, size is " + supplyRequest.getSupplies().size());
                 currentSupplyRequest = supplyRequest;
                 supplyCounter = 0;
             } else {
