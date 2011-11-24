@@ -133,6 +133,7 @@ public class TickListener implements MessageListener {
                     break;
                 }
             }
+
             if (goodsToCreate.size() > 0) {
                 for (Good goodToDo : goodsToCreate) {
                     if (checkMaterialsEnough(goodToDo)) {
