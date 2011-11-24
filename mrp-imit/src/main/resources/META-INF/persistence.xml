@@ -17,6 +17,7 @@
         <class>ru.ifmo.cis.mrp.entity.Order</class>
         <class>ru.ifmo.cis.mrp.entity.OrderContent</class>
         <class>ru.ifmo.cis.mrp.entity.User</class>
+        <class>ru.ifmo.cis.mrp.entity.IlliquidGoodStorage</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

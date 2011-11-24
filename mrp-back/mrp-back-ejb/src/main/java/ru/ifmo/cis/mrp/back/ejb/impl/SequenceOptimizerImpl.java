@@ -85,6 +85,7 @@ public class SequenceOptimizerImpl implements SequenceOptimizer {
                         for (Entry<Material, Long> entry : materialRequest.entrySet()) {
                             if (entry.getKey().getName().equals(materialsToGoods.getMaterial().getName())) {
                                 entry.setValue(entry.getValue() + materialsToGoods.getCount());
+
                             }
                         }
                     }

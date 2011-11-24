@@ -135,13 +135,74 @@ public class TickListener implements MessageListener {
             }
 
             if (goodsToCreate.size() > 0) {
-                for (Good goodToDo : goodsToCreate) {
-                    if (checkMaterialsEnough(goodToDo)) {
-                        createGood(goodToDo);
+                int countConstrain = 0;
+                if ("good1".equals(goodsToCreate.get(0).getName())) {
+                    countConstrain = Production.x;
+                } else if ("good2".equals(goodsToCreate.get(0).getName())) {
+                    countConstrain = Production.y;
+                } else if ("good3".equals(goodsToCreate.get(0).getName())) {
+                    countConstrain = Production.z;
+                }
+                LOGGER.info("[Imit] Setting production constraint for " + goodsToCreate.get(0).getName() + " to " + countConstrain);
+                if (countConstrain != 0) {
+                    if (goodsToCreate.size() <= countConstrain) {
+                        createLiquidGoods(goodsToCreate);
+                        //createIlliquidGoods(countConstrain-goodsToCreate.size(),goodsToCreate.get(0));
                     } else {
-                        break;
+                        createLiquidGoods(goodsToCreate.subList(0, countConstrain));
                     }
                 }
+
+
+            }
+        }
+    }
+
+    private void createIlliquidGoods(int count, Good goodType) {
+        for (int i = 0; i < count; ++i) {
+            if (checkMaterialsEnough(goodType)) {
+                createIlliquidGood(goodType);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void createIlliquidGood(Good goodType) {
+        List<MaterialsToGoods> materialsToGoods = (List<MaterialsToGoods>) em.createQuery("from MaterialsToGoods where good.name=:name").
+                setParameter("name", goodType.getName()).getResultList();
+        List<MaterialStorage> materialStorageList = em.createQuery("from MaterialStorage").getResultList();
+        for (MaterialsToGoods toGoods : materialsToGoods) {
+            for (MaterialStorage materialStorage : materialStorageList) {
+                if (materialStorage.getMaterial().getName().equals(toGoods.getMaterial().getName())) {
+                    materialStorage.setCount(materialStorage.getCount() - toGoods.getCount());
+                    LOGGER.info("[Imit] Removed " + toGoods.getCount() + " " + materialStorage.getMaterial().getName());
+                    em.merge(materialStorage);
+                }
+            }
+        }
+        try {
+            IlliquidGoodStorage goodStorage = (IlliquidGoodStorage) em.createQuery("from IlliquidGoodStorage where good.name = :goodName").setParameter("goodName", goodType.getName()).getSingleResult();
+            goodStorage.setCount(goodStorage.getCount() + 1);
+            LOGGER.info("[Imit] Create non-first ILLIQUID " + goodType.getName());
+            em.persist(goodStorage);
+        } catch (NoResultException e) {
+            IlliquidGoodStorage goodStorage = new IlliquidGoodStorage();
+            goodStorage.setGood(goodType);
+            goodStorage.setCount((long) 1);
+            LOGGER.info("[Imit] Create first ILLIQUID " + goodType.getName());
+            em.persist(goodStorage);
+        } catch (NonUniqueResultException e) {
+            LOGGER.info("[Imit] NonUnique IlliquidGoodStorage!!");
+        }
+    }
+
+    private void createLiquidGoods(List<Good> goodsToCreate) {
+        for (Good goodToDo : goodsToCreate) {
+            if (checkMaterialsEnough(goodToDo)) {
+                createGood(goodToDo);
+            } else {
+                break;
             }
         }
     }
